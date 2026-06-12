@@ -89,6 +89,22 @@ html[data-site-mode="unserious"] .nav-formal-only { display: none; }
   .dropdown-panel {
     animation: dropdown-in 180ms ease-out;
   }
+
+  /* Page content: gentle fade up on load */
+  main {
+    animation: page-in 400ms ease-out both;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes dropdown-in {
