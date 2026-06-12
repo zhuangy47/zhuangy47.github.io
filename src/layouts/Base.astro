@@ -39,17 +39,24 @@ const forcedMode = isFormal === true ? 'formal' : isFormal === false ? 'unseriou
     </script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <Header />
 
-    <main class="max-w-2xl mx-auto px-6 pt-14 pb-20">
+    <main id="main-content" class="max-w-2xl mx-auto px-6 pt-14 pb-20">
       <slot />
     </main>
 
     <script>
       const btn = document.getElementById('theme-toggle')!;
+      const syncPressed = () => {
+        btn.setAttribute('aria-pressed', String(document.documentElement.classList.contains('dark')));
+      };
+      syncPressed();
       btn.addEventListener('click', () => {
         const isDark = document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        syncPressed();
       });
     </script>
   </body>

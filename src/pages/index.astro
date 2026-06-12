@@ -29,15 +29,15 @@ const experience = [...experienceData].sort((a, b) => {
   <section id="intro" class="min-h-[45vh] flex flex-col justify-center py-20">
     <img
       src="/headshot.jpg"
-      alt="Yanni Zhuang"
-      class="w-24 h-24 rounded-full object-cover mb-6"
+      alt="Headshot of Yanni Zhuang"
+      class="w-24 h-24 rounded-full object-cover mb-6 ring-2 ring-accent/40 ring-offset-4 ring-offset-white dark:ring-offset-neutral-950"
     />
-    <h1 class="text-4xl font-bold tracking-tight mb-1">Hi, I'm Yanni.</h1>
-    <p class="text-lg text-neutral-500 dark:text-neutral-300 mb-1">Distributed Systems, Performance Engineering, HPC</p>
-    <p class="text-md text-neutral-600 dark:text-neutral-400 mb-3">
+    <h1 class="text-4xl font-bold tracking-tight mb-1">Hi, I'm Yanni<span class="text-accent">.</span></h1>
+    <p class="text-lg text-neutral-600 dark:text-neutral-300 mb-1">Distributed Systems, Performance Engineering, HPC</p>
+    <p class="text-base text-neutral-600 dark:text-neutral-400 mb-3">
       Incoming SWE @ Jump &middot; Chicago, IL
     </p>
-    <nav class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+    <nav class="flex flex-wrap gap-x-5 gap-y-1 text-sm" aria-label="Contact links">
       <a href="/resume.pdf" target="_blank" rel="noopener">Resume</a>
       <a href="mailto:yanni@yannizhuang.com">Email</a>
       <a href="https://github.com/zhuangy47" target="_blank" rel="noopener">GitHub</a>
@@ -47,7 +47,7 @@ const experience = [...experienceData].sort((a, b) => {
 
   <!-- About -->
   <section id="about" class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 mb-6">About</h2>
+    <h2 class="section-label">About</h2>
     <div class="space-y-4 text-neutral-600 dark:text-neutral-400 leading-relaxed">
       <p>
         I am a recent graduate from the combined Bachelor's/Master's in Computer science at the University of Illinois Urbana-Champaign with a minor in Mathematics.
@@ -59,7 +59,7 @@ const experience = [...experienceData].sort((a, b) => {
 
   <!-- Education -->
   <section id="education" class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 mb-6">Education</h2>
+    <h2 class="section-label">Education</h2>
 
     <div class="mb-10">
       <div class="flex items-baseline gap-3 mb-3">
@@ -71,7 +71,6 @@ const experience = [...experienceData].sort((a, b) => {
         <span class="text-sm text-neutral-500 w-28 shrink-0 pt-0.5">2025 &ndash; 2026</span>
         <div class="min-w-0">
           <p class="font-medium mb-1">Master in Computer Science</p>
-          </ul>
         </div>
       </div>
 
@@ -80,7 +79,7 @@ const experience = [...experienceData].sort((a, b) => {
         <div class="min-w-0">
           <p class="font-medium">Bachelor of Science in Computer Science, Minor in Mathematics</p>
           <p class=" text-xs text-neutral-700 dark:text-neutral-400">
-              <a href="academic.acm.illinois.edu">Academic Committee Chair</a>; Vice Chair; <a href="https://banks.acm.illinois.edu/">Banks Editor</a> &ndash; ACM @ UIUC.
+              <a href="https://academic.acm.illinois.edu">Academic Committee Chair</a>; Vice Chair; <a href="https://banks.acm.illinois.edu/">Banks Editor</a> &ndash; ACM @ UIUC.
           </p>
           <p class="text-xs text-neutral-700 dark:text-neutral-400">
             Software Developer &ndash; &lbrack;Reflections | Projections; Disruption Lab; Illinois Space Society&rbrack;
@@ -92,7 +91,7 @@ const experience = [...experienceData].sort((a, b) => {
 
   <!-- Experience -->
   <section id="experience" class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 mb-6">Experience</h2>
+    <h2 class="section-label">Experience</h2>
 
     {experience.map(job => (
       <div class="mb-8">
@@ -119,7 +118,7 @@ const experience = [...experienceData].sort((a, b) => {
 
   <!-- Projects -->
   <section id="projects" class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 mb-6">Projects</h2>
+    <h2 class="section-label">Projects</h2>
 
     {projects.map(p => (
       <div class="mb-6">
@@ -128,8 +127,8 @@ const experience = [...experienceData].sort((a, b) => {
         {p.links && p.links.length > 0 && (
           <div class="flex gap-4">
             {p.links.map(link => (
-              <a href={link.url} target="_blank" rel="noopener" class="text-sm text-neutral-500">
-                {link.label} &rarr;
+              <a href={link.url} target="_blank" rel="noopener" class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors">
+                {link.label} <span aria-hidden="true">&rarr;</span>
               </a>
             ))}
           </div>
@@ -140,7 +139,7 @@ const experience = [...experienceData].sort((a, b) => {
 
   <!-- Blog -->
   <section id="blog" class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 mb-6">Blog</h2>
+    <h2 class="section-label">Blog</h2>
     {posts.length === 0 ? (
       <p class="text-sm text-neutral-500">Posts coming soon.</p>
     ) : (
@@ -153,7 +152,7 @@ const experience = [...experienceData].sort((a, b) => {
         ))}
       </ul>
     )}
-    <a href="/blog" class="inline-block mt-4 text-sm text-neutral-500">All posts &rarr;</a>
+    <a href="/blog" class="inline-block mt-4 text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors">All posts <span aria-hidden="true">&rarr;</span></a>
   </section>
 
   <!-- Hidden link to /unserious — a barely-visible dot at the bottom -->

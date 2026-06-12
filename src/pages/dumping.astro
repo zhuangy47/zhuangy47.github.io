@@ -15,8 +15,8 @@ const rendered = await Promise.all(
 ---
 
 <Base title="Dumping Grounds — Yanni Zhuang" description="Things I find interesting.">
-  <a href="/unserious" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-    &larr; Home
+  <a href="/unserious" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Home
   </a>
 
   <h1 class="text-2xl font-bold tracking-tight mb-2">Dumping Grounds</h1>
@@ -78,6 +78,7 @@ const rendered = await Promise.all(
   class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
   aria-modal="true"
   role="dialog"
+  aria-labelledby="modal-title"
 >
   <div id="dump-modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
   <div class="relative z-10 bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
@@ -89,9 +90,9 @@ const rendered = await Promise.all(
         </div>
         <button
           id="dump-modal-close"
-          aria-label="Close"
-          class="shrink-0 text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors text-lg leading-none"
-        >✕</button>
+          aria-label="Close dialog"
+          class="shrink-0 text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors text-lg leading-none cursor-pointer"
+        ><span aria-hidden="true">✕</span></button>
       </div>
 
       <img id="modal-thumbnail" src="" alt="" class="w-full rounded mb-4 hidden" />
@@ -134,10 +135,14 @@ const rendered = await Promise.all(
   const closeBtn = document.getElementById('dump-modal-close');
   const backdrop = document.getElementById('dump-modal-backdrop');
 
+  let lastFocused = null;
+
   function openModal(i) {
     const entry = entries[i];
     const tmpl = document.querySelector(`template[data-modal-content="${i}"]`);
     if (!tmpl) return;
+
+    lastFocused = document.activeElement;
 
     modalTitle.textContent = entry.title;
     modalUrl.textContent = entry.url;
@@ -167,12 +172,14 @@ const rendered = await Promise.all(
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
+    closeBtn.focus();
   }
 
   function closeModal() {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
   }
 
   document.querySelectorAll('[data-modal-index]').forEach((btn) => {
@@ -182,6 +189,24 @@ const rendered = await Promise.all(
   closeBtn.addEventListener('click', closeModal);
   backdrop.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
+    if (modal.classList.contains('hidden')) return;
+    if (e.key === 'Escape') {
+      closeModal();
+      return;
+    }
+    // Keep Tab focus inside the open dialog
+    if (e.key === 'Tab') {
+      const focusables = modal.querySelectorAll('a[href], button:not([disabled])');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 </script>

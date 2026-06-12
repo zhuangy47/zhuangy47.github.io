@@ -24,8 +24,8 @@ function fmtDate(d: Date) {
 ---
 
 <Base title={`#${tag} — Yanni Zhuang`}>
-  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-    &larr; Blog
+  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Blog
   </a>
 
   {tag === 'personal' && (
@@ -38,7 +38,7 @@ function fmtDate(d: Date) {
   )}
 
   <div class="flex items-baseline gap-3 mb-8">
-    <h1 class="text-2xl font-bold tracking-tight">#{tag}</h1>
+    <h1 class="text-2xl font-bold tracking-tight"><span class="text-accent">#</span>{tag}</h1>
     <span class="text-sm text-neutral-500">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
   </div>
 

@@ -25,17 +25,18 @@ const title = collection.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.to
 ---
 
 <Base title={`${title} — Photography — Yanni Zhuang`} description={`${title} photo collection.`}>
-  <a href="/photos" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-    &larr; Photography
+  <a href="/photos" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Photography
   </a>
 
   <h1 class="text-2xl font-bold tracking-tight mb-2">{title}</h1>
   <p class="text-sm text-neutral-500 mb-8">{photos.length} photo{photos.length !== 1 ? 's' : ''}</p>
 
   <div class="columns-2 sm:columns-3 gap-2 space-y-2">
-    {photos.map(({ module }) => (
+    {photos.map(({ module }, i) => (
       <img
         src={module.default}
+        alt={`Photograph ${i + 1} of ${photos.length} from the ${title} collection`}
         class="w-full break-inside-avoid rounded"
         loading="lazy"
       />

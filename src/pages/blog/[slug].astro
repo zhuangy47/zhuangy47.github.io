@@ -16,8 +16,8 @@ function fmtDate(d: Date) {
 ---
 
 <Base title={`${post.data.title} — Yanni Zhuang`} description={post.data.description}>
-  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-    &larr; Blog
+  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Blog
   </a>
 
   {post.data.tags.includes('personal') && (
@@ -38,7 +38,7 @@ function fmtDate(d: Date) {
           {post.data.tags.map(tag => (
             <a
               href={`/blog/tags/${tag}`}
-              class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+              class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-accent/10 hover:text-accent transition-colors"
             >
               {tag}
             </a>

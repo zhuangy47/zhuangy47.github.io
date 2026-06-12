@@ -7,23 +7,23 @@ import Base from '../layouts/Base.astro';
   <section class="min-h-[30vh] flex flex-col justify-center py-5">
     <img
       src="/headshot.jpg"
-      alt="Yanni Zhuang"
-      class="w-24 h-24 rounded-full object-cover mb-6"
+      alt="Headshot of Yanni Zhuang"
+      class="w-24 h-24 rounded-full object-cover mb-6 ring-2 ring-accent/40 ring-offset-4 ring-offset-white dark:ring-offset-neutral-950"
     />
-    <h1 class="text-4xl font-bold tracking-tight mb-2">hey there, i'm yanni.</h1>
+    <h1 class="text-4xl font-bold tracking-tight mb-2">hey there, i'm yanni <span class="text-accent">:)</span></h1>
     <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-3">
       professional side quester in chicago
     </p>
   </section>
 
   <section class="mb-16">
-    <h2 class="text-xs font-bold tracking-widest text-neutral-400 dark:text-neutral-500 mb-6">who am i actually</h2>
+    <h2 class="section-label normal-case">who am i actually</h2>
     <div class="space-y-4 text-neutral-600 dark:text-neutral-400 leading-relaxed">
       <p>
-        i spent four years in cornfields for a piece a paper.
+        grew up in new jersey. went to school in champaign, illinois. now in chicago.
       </p>
       <p>
-        i like doing random things.
+        i like doing random things and learning new skills.
       </p>
       <p>
         here is a non-comprehensive list of things i've been up to/enjoy:
@@ -36,18 +36,18 @@ import Base from '../layouts/Base.astro';
         <li>public transportation, specifically of the train variety.</li>
         <li>tennis.</li>
         <li>basketball. i am very bad, but hey we all start somewhere.</li>
+        <li>ice skating</li>
         <li>a little chess</li>
         <li>NES emulators</li>
         <li>da bears</li>
-        <li></li>
         <li>and computer science i guess</li>
       </ul>
     </div>
   </section>
 
   <div class="mt-12">
-    <a href="/" class="text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-      &larr; back to the serious version
+    <a href="/" class="text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+      <span aria-hidden="true">&larr;</span> back to the serious version
     </a>
   </div>
 

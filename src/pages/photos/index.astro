@@ -18,8 +18,8 @@ const collectionNames = Object.keys(collections).sort();
 ---
 
 <Base title="Photography — Yanni Zhuang" description="Photo collections.">
-  <a href="/unserious" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-    &larr; Home
+  <a href="/unserious" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Home
   </a>
 
   <h1 class="text-2xl font-bold tracking-tight mb-2">Photography</h1>
@@ -33,10 +33,10 @@ const collectionNames = Object.keys(collections).sort();
         <li>
           <a
             href={`/photos/${name}`}
-            class="text-sm no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors flex items-baseline gap-3"
+            class="text-sm no-underline hover:text-accent transition-colors flex items-baseline gap-3"
           >
             <span class="capitalize">{name.replace(/-/g, ' ')}</span>
-            <span class="text-xs text-neutral-400 dark:text-neutral-600">{collections[name].length} photo{collections[name].length !== 1 ? 's' : ''}</span>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400">{collections[name].length} photo{collections[name].length !== 1 ? 's' : ''}</span>
           </a>
         </li>
       ))}
