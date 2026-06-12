@@ -84,6 +84,22 @@ html[data-site-mode="unserious"] .nav-formal-only { display: none; }
   .section-label {
     @apply text-xs font-bold tracking-widest uppercase text-accent mb-6;
   }
+
+  /* Dropdown/menu panels: slide down + fade in each time they appear */
+  .dropdown-panel {
+    animation: dropdown-in 180ms ease-out;
+  }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Blog prose — manual styles since typography plugin targets v3 */

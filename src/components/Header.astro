@@ -6,7 +6,7 @@
 >
   <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-accent via-accent-2 to-transparent pointer-events-none" aria-hidden="true"></div>
 
-  <div class="max-w-2xl mx-auto px-6 h-full flex items-center gap-6">
+  <div class="max-w-2xl mx-auto px-6 h-full flex items-center gap-4 sm:gap-6">
 
     <a
       href="/"
@@ -21,7 +21,8 @@
       Yanni Zhuang<span class="text-accent" aria-hidden="true">.</span>
     </a>
 
-    <nav class="flex items-center gap-5 flex-1" aria-label="Site sections">
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-5 flex-1" aria-label="Site sections">
       <a href="/#about" class="nav-formal-only text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">About</a>
       <a href="/#education" class="nav-formal-only text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Education</a>
       <a href="/#experience" class="nav-formal-only text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Experience</a>
@@ -43,7 +44,7 @@
           Personal
         </button>
         <div class="absolute top-full left-0 pt-1 hidden group-hover:block group-focus-within:block min-w-max z-50">
-          <div id="personal-menu-list" class="py-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded shadow-md">
+          <div id="personal-menu-list" class="dropdown-panel py-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded shadow-md">
             <a
               href="/dumping"
               class="block px-4 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
@@ -61,9 +62,11 @@
       </div>
     </nav>
 
+    <!-- Spacer on mobile (desktop nav above carries flex-1 otherwise) -->
+    <div class="flex-1 md:hidden" aria-hidden="true"></div>
+
     <button
-      id="switch-to-formal"
-      class="nav-informal-only text-xs text-neutral-600 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-700 hover:border-accent hover:text-accent transition-colors rounded-full px-3 py-1 cursor-pointer bg-transparent font-inherit leading-none shrink-0"
+      class="js-switch-formal nav-informal-only text-xs text-neutral-600 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-700 hover:border-accent hover:text-accent transition-colors rounded-full px-3 py-1 cursor-pointer bg-transparent font-inherit leading-none shrink-0"
     >
       serious mode
     </button>
@@ -72,21 +75,78 @@
       id="theme-toggle"
       aria-label="Dark mode"
       aria-pressed="false"
-      class="text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors text-base leading-none shrink-0"
+      class="text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors text-base leading-none shrink-0 p-2 -m-2 cursor-pointer"
     >
       <span class="dark:hidden" aria-hidden="true">☾</span>
       <span class="hidden dark:inline" aria-hidden="true">☀</span>
     </button>
+
+    <!-- Mobile menu toggle -->
+    <button
+      id="mobile-menu-button"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="md:hidden text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors shrink-0 p-2 -mr-2 cursor-pointer"
+    >
+      <svg id="mobile-menu-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" />
+      </svg>
+      <svg id="mobile-menu-icon-close" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M5 5l14 14M5 19L19 5" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div
+    id="mobile-menu"
+    class="dropdown-panel hidden md:hidden absolute top-full left-0 right-0 bg-white dark:bg-neutral-950 border-b border-neutral-200/60 dark:border-neutral-800/60 shadow-sm"
+  >
+    <nav class="max-w-2xl mx-auto px-6 py-2 flex flex-col" aria-label="Site sections">
+      <a href="/#about" class="nav-formal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">About</a>
+      <a href="/#education" class="nav-formal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Education</a>
+      <a href="/#experience" class="nav-formal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Experience</a>
+      <a href="/#projects" class="nav-formal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Projects</a>
+
+      <a href="/blog" class="py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Blog</a>
+
+      <a href="/dumping" class="nav-informal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Dumping Grounds</a>
+      <a href="/photos" class="nav-informal-only py-2.5 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">Photography</a>
+    </nav>
   </div>
 </header>
 
 <script>
-  document.getElementById('switch-to-formal')?.addEventListener('click', () => {
-    localStorage.setItem('siteMode', 'formal');
-    window.location.href = '/';
+  document.querySelectorAll('.js-switch-formal').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      localStorage.setItem('siteMode', 'formal');
+      window.location.href = '/';
+    });
   });
 
-  // Keep aria-expanded in sync with the hover/focus-driven dropdown
+  // Mobile menu: toggle, close on link click or Escape
+  const mobileBtn = document.getElementById('mobile-menu-button')!;
+  const mobileMenu = document.getElementById('mobile-menu')!;
+  const iconOpen = document.getElementById('mobile-menu-icon-open')!;
+  const iconClose = document.getElementById('mobile-menu-icon-close')!;
+
+  function setMobileMenu(open: boolean) {
+    mobileMenu.classList.toggle('hidden', !open);
+    mobileBtn.setAttribute('aria-expanded', String(open));
+    iconOpen.classList.toggle('hidden', open);
+    iconClose.classList.toggle('hidden', !open);
+  }
+
+  mobileBtn.addEventListener('click', () => {
+    setMobileMenu(mobileMenu.classList.contains('hidden'));
+  });
+
+  mobileMenu.querySelectorAll('a, button').forEach((el) => {
+    el.addEventListener('click', () => setMobileMenu(false));
+  });
+
+  // Keep aria-expanded in sync with the hover/focus-driven desktop dropdown
   const menu = document.getElementById('personal-menu');
   const menuButton = document.getElementById('personal-menu-button');
   if (menu && menuButton) {
@@ -97,11 +157,17 @@
     menu.addEventListener('focusout', (e) => {
       if (!menu.contains(e.relatedTarget as Node)) sync(false);
     });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.contains(document.activeElement)) {
-        sync(false);
-        menuButton.blur();
-      }
-    });
   }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!mobileMenu.classList.contains('hidden')) {
+      setMobileMenu(false);
+      mobileBtn.focus();
+    }
+    if (menu && menuButton && menu.contains(document.activeElement)) {
+      menuButton.setAttribute('aria-expanded', 'false');
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  });
 </script>
