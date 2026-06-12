@@ -1,0 +1,53 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tags = [...new Set(posts.flatMap(p => p.data.tags))];
+  return tags.map(tag => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter(p => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+
+function fmtDate(d: Date) {
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<Base title={`#${tag} — Yanni Zhuang`}>
+  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Blog
+  </a>
+
+  {tag === 'personal' && (
+    <script is:inline>
+      (function () {
+        var mode = document.documentElement.getAttribute('data-site-mode') || 'formal';
+        if (mode !== 'unserious') window.location.replace('/blog');
+      })();
+    </script>
+  )}
+
+  <div class="flex items-baseline gap-3 mb-8">
+    <h1 class="text-2xl font-bold tracking-tight"><span class="text-accent">#</span>{tag}</h1>
+    <span class="text-sm text-neutral-500">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
+  </div>
+
+  <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+    {posts.map(post => (
+      <li class="flex justify-between items-baseline gap-4 py-2.5">
+        <a href={`/blog/${post.slug}`} class="text-sm">{post.data.title}</a>
+        <span class="text-xs text-neutral-500 shrink-0">{fmtDate(post.data.date)}</span>
+      </li>
+    ))}
+  </ul>
+</Base>

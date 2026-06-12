@@ -1,0 +1,16 @@
+[
+  {
+    "name": "GPU-Accelerating the 1 Billion Row Challenge",
+    "description": "GPU-based processing pipeline using DirectStorage for the 1BRC dataset.",
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/devksingh4/1brc-gpu" }
+    ]
+  },  
+  {
+    "name": "PyCoRa",
+    "description": "PyTorch reimplementation of CoRa ragged tensor functionality.",
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/devksingh4/pycora" }
+    ]
+  }
+]

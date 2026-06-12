@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function fmtDate(d: Date) {
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Base title={`${post.data.title} — Yanni Zhuang`} description={post.data.description}>
+  <a href="/blog" class="inline-block mt-8 mb-8 text-sm text-neutral-600 dark:text-neutral-400 no-underline hover:text-accent transition-colors">
+    <span aria-hidden="true">&larr;</span> Blog
+  </a>
+
+  {post.data.tags.includes('personal') && (
+    <script is:inline>
+      (function () {
+        var mode = document.documentElement.getAttribute('data-site-mode') || 'formal';
+        if (mode !== 'unserious') window.location.replace('/blog');
+      })();
+    </script>
+  )}
+
+  <article>
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold tracking-tight mb-2">{post.data.title}</h1>
+      <p class="text-sm text-neutral-500">{fmtDate(post.data.date)}</p>
+      {post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          {post.data.tags.map(tag => (
+            <a
+              href={`/blog/tags/${tag}`}
+              class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-accent/10 hover:text-accent transition-colors"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>

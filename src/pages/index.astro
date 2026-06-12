@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import experienceData from '../data/experience.json';
+import projects from '../data/projects.json';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+function fmtDate(d: Date) {
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+}
+
+function fmtYM(ym: string) {
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(y, m - 1).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+}
+
+const experience = [...experienceData].sort((a, b) => {
+  const startDiff = b.start.localeCompare(a.start);
+  return startDiff !== 0 ? startDiff : b.end.localeCompare(a.end);
+});
+---
+
+<Base title="Yanni Zhuang" isFormal={true}>
+
+  <!-- Hero -->
+  <section id="intro" class="min-h-[45vh] flex flex-col justify-center py-20">
+    <img
+      src="/headshot.jpg"
+      alt="Headshot of Yanni Zhuang"
+      class="w-24 h-24 rounded-full object-cover mb-6 ring-2 ring-accent/40 ring-offset-4 ring-offset-white dark:ring-offset-neutral-950"
+    />
+    <h1 class="text-4xl font-bold tracking-tight mb-1">Hi, I'm Yanni<span class="text-accent">.</span></h1>
+    <p class="text-lg text-neutral-600 dark:text-neutral-300 mb-1">Distributed Systems, Performance Engineering, HPC</p>
+    <p class="text-base text-neutral-600 dark:text-neutral-400 mb-3">
+      Incoming SWE @ Jump &middot; Chicago, IL
+    </p>
+    <nav class="flex flex-wrap gap-x-5 gap-y-1 text-sm" aria-label="Contact links">
+      <a href="/resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a href="mailto:yanni@yannizhuang.com">Email</a>
+      <a href="https://github.com/zhuangy47" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/yanni-zhuang" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="mb-16">
+    <h2 class="section-label">About</h2>
+    <div class="space-y-4 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+      <p>
+        I am a recent graduate from the combined Bachelor's/Master's in Computer science at the University of Illinois Urbana-Champaign with a minor in Mathematics.
+        This past summer, I was an intern at Jump Trading, where I worked on performance optimisations for post-trade analysis pipelines. 
+        Before that, I was at Modern Treasury, where I optimised a financial data ingestion pipeline.
+      </p>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="mb-16">
+    <h2 class="section-label">Education</h2>
+
+    <div class="mb-10">
+      <div class="flex items-baseline gap-3 mb-3">
+        <span class="font-bold">University of Illinois Urbana-Champaign</span>
+        <span class="text-xs font-semibold tracking-widest uppercase text-neutral-500">Urbana, IL</span>
+      </div>
+
+      <div class="flex gap-3 mb-2">
+        <span class="text-sm text-neutral-500 w-28 shrink-0 pt-0.5">2025 &ndash; 2026</span>
+        <div class="min-w-0">
+          <p class="font-medium mb-1">Master of Computer Science</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <span class="text-sm text-neutral-500 w-28 shrink-0 pt-0.5">2022 &ndash; 2025</span>
+        <div class="min-w-0">
+          <p class="font-medium">Bachelor of Science in Computer Science, Minor in Mathematics</p>
+          <p class=" text-xs text-neutral-700 dark:text-neutral-400">
+              <a href="https://academic.acm.illinois.edu">Academic Committee Chair</a>; Vice Chair; <a href="https://banks.acm.illinois.edu/">Banks Editor</a> &ndash; ACM @ UIUC.
+          </p>
+          <p class="text-xs text-neutral-700 dark:text-neutral-400">
+            Software Developer &ndash; &lbrack;Reflections | Projections; Disruption Lab; Illinois Space Society&rbrack;
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="mb-16">
+    <h2 class="section-label">Experience</h2>
+
+    {experience.map(job => (
+      <div class="mb-8">
+        <div class="flex justify-between items-baseline flex-wrap gap-x-4 gap-y-0.5 mb-0.5">
+          <span class="font-bold">
+            {job.orgUrl
+              ? <a href={job.orgUrl} target="_blank" rel="noopener">{job.org}</a>
+              : job.org}
+          </span>
+          <span class="text-sm text-neutral-500">{fmtYM(job.start)} &ndash; {fmtYM(job.end)}</span>
+        </div>
+        <div class="flex justify-between items-baseline flex-wrap gap-x-4 mb-3">
+          <span class="text-sm text-neutral-500">{job.title}</span>
+          {job.location && <span class="text-sm text-neutral-500">{job.location}</span>}
+        </div>
+        {job.bullets.length > 0 && (
+          <ul class="list-disc list-outside ml-4 space-y-1.5 text-sm text-neutral-600 dark:text-neutral-400">
+            {job.bullets.map(b => <li set:html={b} />)}
+          </ul>
+        )}
+      </div>
+    ))}
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="mb-16">
+    <h2 class="section-label">Projects</h2>
+
+    {projects.map(p => (
+      <div class="mb-6">
+        <span class="font-bold">{p.name}</span>
+        <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 mb-1.5">{p.description}</p>
+        {p.links && p.links.length > 0 && (
+          <div class="flex gap-4">
+            {p.links.map(link => (
+              <a href={link.url} target="_blank" rel="noopener" class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors">
+                {link.label} <span aria-hidden="true">&rarr;</span>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="mb-16">
+    <h2 class="section-label">Blog</h2>
+    {posts.length === 0 ? (
+      <p class="text-sm text-neutral-500">Posts coming soon.</p>
+    ) : (
+      <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+        {posts.map(post => (
+          <li class="flex justify-between items-baseline gap-4 py-2.5">
+            <a href={`/blog/${post.slug}`} class="text-sm">{post.data.title}</a>
+            <span class="text-xs text-neutral-500 shrink-0">{fmtDate(post.data.date)}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <a href="/blog" class="inline-block mt-4 text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors">All posts <span aria-hidden="true">&rarr;</span></a>
+  </section>
+
+  <!-- Hidden link to /unserious — a barely-visible dot at the bottom -->
+  <div class="flex justify-center pb-4">
+    <a
+      href="/unserious"
+      id="go-unserious"
+      class="text-neutral-200 dark:text-neutral-800 hover:text-neutral-400 dark:hover:text-neutral-600 transition-colors text-xs leading-none no-underline select-none"
+      aria-hidden="true"
+      tabindex="-1"
+    >a less serious introduction</a>
+  </div>
+
+</Base>
+
+<script>
+  document.getElementById('go-unserious')?.addEventListener('click', () => {
+    localStorage.setItem('siteMode', 'unserious');
+  });
+</script>
