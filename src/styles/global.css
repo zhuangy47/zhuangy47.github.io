@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/* Dark mode: applies when <html> has class="dark" */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Font */
+@theme {
+  --font-sans: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth scroll with offset for fixed header */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+  }
+
+  body {
+    @apply bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-150;
+  }
+
+  a {
+    @apply text-inherit underline underline-offset-2 decoration-neutral-400 dark:decoration-neutral-600 hover:decoration-current;
+  }
+}
+
+/* Site mode: formal (default) vs unserious */
+.nav-informal-only { display: none; }
+html[data-site-mode="unserious"] .nav-informal-only { display: block; }
+html[data-site-mode="unserious"] .nav-formal-only { display: none; }
+
+/* Blog prose — manual styles since typography plugin targets v3 */
+@layer components {
+  .prose {
+    @apply text-neutral-700 dark:text-neutral-300 leading-relaxed;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    @apply font-bold text-neutral-900 dark:text-neutral-100 mt-8 mb-3;
+  }
+
+  .prose h1 { @apply text-2xl; }
+  .prose h2 { @apply text-xl; }
+  .prose h3 { @apply text-base; }
+
+  .prose p { @apply mb-4; }
+
+  .prose ul,
+  .prose ol {
+    @apply pl-5 mb-4 space-y-1;
+  }
+
+  .prose ul { @apply list-disc; }
+  .prose ol { @apply list-decimal; }
+
+  .prose code {
+    @apply text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded;
+  }
+
+  .prose pre {
+    @apply bg-neutral-100 dark:bg-neutral-800 rounded-md p-4 overflow-x-auto mb-4 text-sm;
+  }
+
+  .prose pre code { @apply bg-transparent p-0; }
+
+  .prose blockquote {
+    @apply border-l-2 border-neutral-300 dark:border-neutral-700 pl-4 text-neutral-500 dark:text-neutral-400 mb-4;
+  }
+
+  .prose a { @apply underline; }
+}

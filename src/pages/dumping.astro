@@ -1,0 +1,187 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const entries = await getCollection('dumping');
+entries.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content } = await entry.render();
+    return { entry, Content };
+  })
+);
+
+---
+
+<Base title="Dumping Grounds — Yanni Zhuang" description="Things I find interesting.">
+  <a href="/unserious" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
+    &larr; Home
+  </a>
+
+  <h1 class="text-2xl font-bold tracking-tight mb-2">Dumping Grounds</h1>
+  <p class="text-sm text-neutral-500 mb-8">interesting things on the interwebs</p>
+
+{rendered.length === 0 ? (
+    <p class="text-sm text-neutral-500">Coming soon.</p>
+  ) : (
+    <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+      {rendered.map(({ entry, Content }, i) => (
+        <li>
+          <button
+            class="w-full text-left py-4 cursor-pointer group"
+            data-modal-index={i}
+          >
+            <div class="flex gap-3 items-start">
+              {entry.data.thumbnail && (
+                <img
+                  src={entry.data.thumbnail}
+                  alt=""
+                  class="w-24 h-16 object-cover rounded shrink-0 mt-0.5"
+                />
+              )}
+              <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-baseline gap-4 flex-wrap mb-1">
+                  <span class="font-medium text-sm group-hover:underline">{entry.data.title}</span>
+                  {entry.data.tags && entry.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-1.5">
+                      {entry.data.tags.map(tag => (
+                        <span class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div class="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2">
+                  <div class="dump-preview" data-index={i}></div>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <!-- Hidden full content for modal -->
+          <template data-modal-content={i}>
+            <div class="dump-full-content hidden">
+              <Content />
+            </div>
+          </template>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>
+
+<!-- Modal overlay -->
+<div
+  id="dump-modal"
+  class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+  aria-modal="true"
+  role="dialog"
+>
+  <div id="dump-modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
+    <div class="p-6">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div class="flex-1 min-w-0">
+          <h2 id="modal-title" class="text-xl font-bold tracking-tight mb-1"></h2>
+          <a id="modal-url" href="#" target="_blank" rel="noopener" class="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 break-all transition-colors"></a>
+        </div>
+        <button
+          id="dump-modal-close"
+          aria-label="Close"
+          class="shrink-0 text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors text-lg leading-none"
+        >✕</button>
+      </div>
+
+      <img id="modal-thumbnail" src="" alt="" class="w-full rounded mb-4 hidden" />
+
+      <div id="modal-tags" class="flex flex-wrap gap-1.5 mb-4"></div>
+
+      <hr class="border-neutral-200 dark:border-neutral-800 mb-4" />
+
+      <div
+        id="modal-body"
+        class="prose prose-sm dark:prose-invert max-w-none prose-neutral prose-a:text-neutral-900 dark:prose-a:text-neutral-100"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ entries: rendered.map(({ entry }) => ({
+  title: entry.data.title,
+  url: entry.data.url,
+  thumbnail: entry.data.thumbnail ?? null,
+  tags: entry.data.tags ?? [],
+})) }}>
+  // Populate text previews from rendered MDX content
+  document.querySelectorAll('[data-modal-index]').forEach((btn) => {
+    const i = btn.dataset.modalIndex;
+    const tmpl = document.querySelector(`template[data-modal-content="${i}"]`);
+    if (!tmpl) return;
+    const clone = tmpl.content.cloneNode(true);
+    const text = clone.firstElementChild?.textContent?.trim() ?? '';
+    const preview = btn.querySelector(`[data-index="${i}"]`);
+    if (preview) preview.textContent = text.slice(0, 200) + (text.length > 200 ? '…' : '');
+  });
+
+  const modal = document.getElementById('dump-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalUrl = document.getElementById('modal-url');
+  const modalThumbnail = document.getElementById('modal-thumbnail');
+  const modalTags = document.getElementById('modal-tags');
+  const modalBody = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('dump-modal-close');
+  const backdrop = document.getElementById('dump-modal-backdrop');
+
+  function openModal(i) {
+    const entry = entries[i];
+    const tmpl = document.querySelector(`template[data-modal-content="${i}"]`);
+    if (!tmpl) return;
+
+    modalTitle.textContent = entry.title;
+    modalUrl.textContent = entry.url;
+    modalUrl.href = entry.url;
+
+    if (entry.thumbnail) {
+      modalThumbnail.src = entry.thumbnail;
+      modalThumbnail.classList.remove('hidden');
+    } else {
+      modalThumbnail.classList.add('hidden');
+    }
+
+    modalTags.innerHTML = '';
+    entry.tags.forEach(tag => {
+      const span = document.createElement('span');
+      span.className = 'text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded';
+      span.textContent = tag;
+      modalTags.appendChild(span);
+    });
+
+    const clone = tmpl.content.cloneNode(true);
+    const contentEl = clone.firstElementChild;
+    contentEl.classList.remove('hidden');
+    modalBody.innerHTML = '';
+    modalBody.appendChild(contentEl);
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-modal-index]').forEach((btn) => {
+    btn.addEventListener('click', () => openModal(Number(btn.dataset.modalIndex)));
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>

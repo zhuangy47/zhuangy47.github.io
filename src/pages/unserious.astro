@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Yanni Zhuang" isFormal={false}>
+
+  <section class="min-h-[30vh] flex flex-col justify-center py-5">
+    <img
+      src="/headshot.jpg"
+      alt="Yanni Zhuang"
+      class="w-24 h-24 rounded-full object-cover mb-6"
+    />
+    <h1 class="text-4xl font-bold tracking-tight mb-2">hey there, i'm yanni.</h1>
+    <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-3">
+      professional side quester in chicago
+    </p>
+  </section>
+
+  <section class="mb-16">
+    <h2 class="text-xs font-bold tracking-widest text-neutral-400 dark:text-neutral-500 mb-6">who am i actually</h2>
+    <div class="space-y-4 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+      <p>
+        i spent four years in cornfields for a piece a paper.
+      </p>
+      <p>
+        i like doing random things.
+      </p>
+      <p>
+        here is a non-comprehensive list of things i've been up to/enjoy:
+      </p>
+      <ul class="list-disc list-outside ml-4 space-y-1.5 text-sm text-neutral-600 dark:text-neutral-400">
+        <li>photography, generally of the nature or street variety.</li>
+        <li>playing/making music.</li>
+        <li>crocheting.</li>
+        <li>national parks. i've been to the grand canyon, yellowstone, and acadia.</li>
+        <li>public transportation, specifically of the train variety.</li>
+        <li>tennis.</li>
+        <li>basketball. i am very bad, but hey we all start somewhere.</li>
+        <li>a little chess</li>
+        <li>NES emulators</li>
+        <li>da bears</li>
+        <li></li>
+        <li>and computer science i guess</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="mt-12">
+    <a href="/" class="text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
+      &larr; back to the serious version
+    </a>
+  </div>
+
+</Base>

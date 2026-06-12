@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
+
+function fmtDate(d: Date) {
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<Base title="Blog — Yanni Zhuang">
+  <a href="/" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
+    &larr; Home
+  </a>
+
+  <h1 class="text-2xl font-bold tracking-tight mb-2">Blog</h1>
+
+  {allTags.length > 0 && (
+    <div class="flex flex-wrap gap-1.5 mb-8 mt-3">
+      {allTags.map(tag => (
+        <a
+          href={`/blog/tags/${tag}`}
+          class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+          data-personal={tag === 'personal' ? true : undefined}
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+  )}
+
+  {posts.length === 0 ? (
+    <p class="text-sm text-neutral-500">Posts coming soon.</p>
+  ) : (
+    <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+      {posts.map(post => (
+        <li class="py-4" data-personal={post.data.tags.includes('personal') ? true : undefined}>
+          <div class="flex justify-between items-baseline gap-4 flex-wrap">
+            <a href={`/blog/${post.slug}`} class="font-medium text-sm">{post.data.title}</a>
+            <span class="text-xs text-neutral-500 shrink-0">{fmtDate(post.data.date)}</span>
+          </div>
+          {post.data.description && (
+            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{post.data.description}</p>
+          )}
+          {post.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              {post.data.tags.map(tag => (
+                <a
+                  href={`/blog/tags/${tag}`}
+                  class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
+
+<script>
+  const mode = document.documentElement.getAttribute('data-site-mode') || 'formal';
+  if (mode !== 'unserious') {
+    document.querySelectorAll('[data-personal]').forEach(el => el.remove());
+  }
+</script>
+</Base>

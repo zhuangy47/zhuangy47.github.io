@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const allPhotos = import.meta.glob('../../photos/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG}', { eager: true });
+
+  const collections: Record<string, { path: string; module: any }[]> = {};
+  for (const [path, module] of Object.entries(allPhotos)) {
+    const parts = path.split('/');
+    const collection = parts[parts.length - 2];
+    if (collection && collection !== 'photos') {
+      if (!collections[collection]) collections[collection] = [];
+      collections[collection].push({ path, module });
+    }
+  }
+
+  return Object.entries(collections).map(([collection, photos]) => ({
+    params: { collection },
+    props: { photos, collection },
+  }));
+}
+
+const { photos, collection } = Astro.props;
+const title = collection.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+---
+
+<Base title={`${title} — Photography — Yanni Zhuang`} description={`${title} photo collection.`}>
+  <a href="/photos" class="inline-block mt-8 mb-8 text-sm text-neutral-500 no-underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
+    &larr; Photography
+  </a>
+
+  <h1 class="text-2xl font-bold tracking-tight mb-2">{title}</h1>
+  <p class="text-sm text-neutral-500 mb-8">{photos.length} photo{photos.length !== 1 ? 's' : ''}</p>
+
+  <div class="columns-2 sm:columns-3 gap-2 space-y-2">
+    {photos.map(({ module }) => (
+      <img
+        src={module.default}
+        class="w-full break-inside-avoid rounded"
+        loading="lazy"
+      />
+    ))}
+  </div>
+</Base>

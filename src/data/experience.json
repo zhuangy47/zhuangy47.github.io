@@ -1,0 +1,49 @@
+[
+  {
+    "title": "Software Engineer Intern",
+    "org": "Jump Trading",
+    "location": "Chicago, IL",
+    "start": "2025-06",
+    "end": "2025-08",
+    "bullets": [
+      "Optimized post-trade analytics pipelines for latency and throughput"
+    ]
+  },
+  {
+    "title": "Undergraduate Research Assistant",
+    "org": "Parallel Programming Laboratory",
+    "orgUrl": "https://charm.cs.illinois.edu/research/ppl/",
+    "location": "Urbana, IL",
+    "start": "2023-05",
+    "end": "2025-05",
+    "bullets": [
+      "Constructed benchmarks to verify correctness of non-shared and shared memory <a href=\"https://charmplusplus.org/\" target=\"_blank\" rel=\"noopener\">Charm++</a> builds",
+      "Analyzed benchmark results and hardware performance counter data to identify bugs and anomalies",
+      "Assisted with development of parallel I/O library for Charm++"
+    ]
+  },
+  {
+    "title": "Course Staff & Research Assistant",
+    "org": "University of Illinois Urbana-Champaign",
+    "location": "Urbana, IL",
+    "start": "2023-08",
+    "end": "2025-12",
+    "bullets": [
+      "Course Assistant for CS 128 (Intro to Computer Science II), CS 374 (Algorithms), CS 433 (Computer System Organsation)",
+      "Lead Course Developer for <a href=\"https://cs341.cs.illinois.edu/\" target=\"_blank\" rel=\"noopener\">CS 341</a> (Systems Programming)",
+      "Prototyped a permissioning system for PraireLearn"
+    ]
+  },
+  {
+    "title": "Software Engineer Intern",
+    "org": "Modern Treasury",
+    "location": "New York, NY",
+    "start": "2024-05",
+    "end": "2024-08",
+    "bullets": [
+      "Employed profiling tools to identify bottlenecks in pre-existing data ingestion system",
+      "Designed and implemented new data ingestion infrastructure, resulting in 275× improvement in throughput",
+      "Improved validation and error handling for better observability"
+    ]
+  }
+]
