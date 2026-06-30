@@ -14,6 +14,7 @@ const dumping = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
+    date: z.date(),
     url: z.string().url(),
     thumbnail: z.string().optional(),
     tags: z.array(z.string()).optional(),

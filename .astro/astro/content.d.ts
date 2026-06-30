@@ -160,6 +160,13 @@ declare module 'astro:content' {
   render(): Render[".md"];
 }>;
 "dumping": {
+"fast-refresh-eink-monitor.mdx": {
+	id: "fast-refresh-eink-monitor.mdx";
+  slug: "fast-refresh-eink-monitor";
+  body: string;
+  collection: "dumping";
+  data: InferEntrySchema<"dumping">
+} & { render(): Render[".mdx"] };
 "lorem-ipsum-mystery.mdx": {
 	id: "lorem-ipsum-mystery.mdx";
   slug: "lorem-ipsum-mystery";
