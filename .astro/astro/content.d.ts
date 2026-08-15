@@ -151,14 +151,22 @@ declare module 'astro:content' {
 	>;
 
 	type ContentEntryMap = {
-		"blog": Record<string, {
-  id: string;
-  slug: string;
+		"blog": {
+"antitech.mdx": {
+	id: "antitech.mdx";
+  slug: "antitech";
   body: string;
   collection: "blog";
-  data: InferEntrySchema<"blog">;
-  render(): Render[".md"];
-}>;
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
+"paris.mdx": {
+	id: "paris.mdx";
+  slug: "paris";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
+};
 "dumping": {
 "fast-refresh-eink-monitor.mdx": {
 	id: "fast-refresh-eink-monitor.mdx";

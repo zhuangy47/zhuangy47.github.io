@@ -4,7 +4,10 @@ import { getCollection } from 'astro:content';
 import experienceData from '../data/experience.json';
 import projects from '../data/projects.json';
 
+// The home page is always the formal/serious view (isFormal={true} below), so
+// never surface personal-tagged posts in this blog preview.
 const posts = (await getCollection('blog'))
+  .filter(p => !p.data.tags.includes('personal'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
 
