@@ -18,6 +18,10 @@ export async function getStaticPaths() {
 
 const { tag, posts } = Astro.props;
 
+const isPersonal = (p: (typeof posts)[number]) => p.data.tags.includes('personal');
+// Nothing left to show in formal mode once the personal posts are stripped.
+const hiddenInFormal = posts.every(isPersonal);
+
 function fmtDate(d: Date) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
@@ -28,7 +32,7 @@ function fmtDate(d: Date) {
     <span aria-hidden="true">&larr;</span> Blog
   </a>
 
-  {tag === 'personal' && (
+  {hiddenInFormal && (
     <script is:inline>
       (function () {
         var mode = document.documentElement.getAttribute('data-site-mode') || 'formal';
@@ -39,15 +43,25 @@ function fmtDate(d: Date) {
 
   <div class="flex items-baseline gap-3 mb-8">
     <h1 class="text-2xl font-bold tracking-tight"><span class="text-accent">#</span>{tag}</h1>
-    <span class="text-sm text-neutral-500">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
+    <span id="tag-post-count" class="text-sm text-neutral-500">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
   </div>
 
-  <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+  <ul id="tag-post-list" class="divide-y divide-neutral-200 dark:divide-neutral-800">
     {posts.map(post => (
-      <li class="flex justify-between items-baseline gap-4 py-2.5">
+      <li class="flex justify-between items-baseline gap-4 py-2.5" data-personal={isPersonal(post) ? true : undefined}>
         <a href={`/blog/${post.slug}`} class="text-sm">{post.data.title}</a>
         <span class="text-xs text-neutral-500 shrink-0">{fmtDate(post.data.date)}</span>
       </li>
     ))}
   </ul>
+
+<script>
+  const mode = document.documentElement.getAttribute('data-site-mode') || 'formal';
+  if (mode !== 'unserious') {
+    document.querySelectorAll('[data-personal]').forEach(el => el.remove());
+    const count = document.getElementById('tag-post-count')!;
+    const n = document.getElementById('tag-post-list')!.children.length;
+    count.textContent = `${n} post${n !== 1 ? 's' : ''}`;
+  }
+</script>
 </Base>

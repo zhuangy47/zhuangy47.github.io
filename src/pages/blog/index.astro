@@ -7,6 +7,12 @@ const posts = (await getCollection('blog'))
 
 const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
 
+// A tag is "personal" if no non-personal post carries it — otherwise it survives
+// in formal mode and links to a tag page that lists the personal posts.
+const formalTags = new Set(
+  posts.filter(p => !p.data.tags.includes('personal')).flatMap(p => p.data.tags)
+);
+
 function fmtDate(d: Date) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
@@ -25,7 +31,7 @@ function fmtDate(d: Date) {
         <a
           href={`/blog/tags/${tag}`}
           class="text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded no-underline hover:bg-accent/10 hover:text-accent transition-colors"
-          data-personal={tag === 'personal' ? true : undefined}
+          data-personal={formalTags.has(tag) ? undefined : true}
         >
           {tag}
         </a>
